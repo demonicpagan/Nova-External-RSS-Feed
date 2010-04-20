@@ -1,0 +1,376 @@
++--------------------------------------------------------
+| RSS External Feed Application
+|
+| Developer: Dustin Lennon
+| Email: demonicpagan@gmail.com
+|
+| This application is developed under the licenses
+| of Nova and CodeIgniter.
++--------------------------------------------------------
+
+The following application will add the ability to pull RSS external feeds to your Nova management system. To install this
+application you need to perform the following steps.
+
+1. a. Use the included nova_rss.sql file to add the needed sql table to your nova installation. (preferred route)
+   b. Load up http://yoursite.com/index.php/install
+        * Select Add your own tables/fields to the database »
+		* Input your admin credentials
+		* Add database table: rss
+		* Rinse and repeat from inputting your admin credentials to add the following database fields:
+		    (order: Field name, Field type, Field constraint, Field default)
+			rss_id int 5 1
+			rss_key varchar 100 (blank - don't put anything in default field)
+			rss_value text (blank - don't put anything in default field)
+
+2. Upload application/controllers/main.php to your application/controllers folder of your Nova install replacing 
+the existing one if you haven't already modified this file. If you already have changes in this file, it's best 
+that you just take the contents of this file and add it into your existing main.php file.
+
+3*. Upload application/controllers/site.php to your application/controllers folder of your Nova install replacing 
+the existing one if you haven't already modified this file. If you already have changes in this file, it's best 
+that you just take the contents of this file and add it into your existing site.php file.
+
+*Note: If you are using my Mibbit Chat MOD, you'll want to be careful as to not overwrite the settings function. Refer to 
+the end of this README before the ChangeLog for what to do if you do have the Mibbit Chat MOD installed.
+
+4. Add the following line into your app_lang.php for your associated language(s) after the rest of the includes 
+and before the Global items.
+	/* include RSS External Feed Language file */
+	include_once APPPATH .'language/'. $language . '/rss_lang.php';
+
+5. Upload application/language/english/rss_lang.php to your 
+application/views/language/english folder of your Nova install. Translate this page into other languages and upload
+them to the appropriate language directories. (If you would like your language included into a future release, 
+please contact me via email.)
+
+6. Upload application/models/rss_model.php to your application/models folder of your Nova installation.
+
+7. Upload application/views/_base_override/main/pages/main_rss.php to your
+application/views/_base_override/main/pages folder of your Nova install.
+
+8*. Upload application/views/_base_override/admin/pages/site_settings.php to your
+application/views/_base_override/admin/pages folder of your Nova install.
+
+*Note: If you are using my Mibbit Chat MOD, you'll want to be careful as to not overwrite the contents of this page. Refer to 
+the end of this README before the ChangeLog for what to do if you do have the Mibbit Chat MOD installed.
+
+9. Log into your Nova management system and add a RSS menu item so your users can access your RSS page.
+You will use the link of main/rss when you create the menu item.
+
+If you experience any issues please submit a bug report on 
+http://redmine.stelth2000inc.com/projects/nova-rss-feeds/issues.
+
+You can always get the latest SVN trunk from http://redmine.stelth2000inc.com/projects/show/nova-rss-feeds as well.
+
+-------------------------------------
+CHANGES TO MAKE IF YOU HAVE MIBBIT
+CHAT MOD INSTALLED
+
+application/controllers/site.php
+Look for:
+		/* load mibbit chat settings model */
+		$this->load->model('chat_model', 'chat');
+
+Add after:
+		/* load rss settings model */
+		$this->load->model('rss_model', 'rss');
+
+Look for:
+		/* mibbit submit button */
+		if (isset($_POST['submit-mibbit']))
+		{
+			$key_exceptions = array('submit', 'old_sim_type');
+
+			foreach ($_POST as $key => $value)
+			{
+				if (!in_array($key, $key_exceptions))
+				{
+					$update_array['mibbit_value'] = $this->input->xss_clean($value);
+
+					/* run the update query */
+					$update = $this->chat->update_setting($key, $update_array);
+				}
+			}
+
+			if ($update > 0)
+			{
+				$new_type = $this->input->post('sim_type', TRUE);
+				$old_type = $this->input->post('old_sim_type', TRUE);
+
+				if ($new_type != $old_type)
+				{
+					$data_old = array('menu_display' => 'n');
+					$data_new = array('menu_display' => 'y');
+
+					$this->menu_model->update_menu_item($data_old, $old_type, 'menu_sim_type');
+					$this->menu_model->update_menu_item($data_new, $new_type, 'menu_sim_type');
+				}
+
+				$message = sprintf(
+					lang('flash_success_plural'),
+					ucfirst(lang('labels_site') .' '. lang('labels_settings')),
+					lang('actions_updated'),
+					''
+				);
+
+				$flash['status'] = 'success';
+				$flash['message'] = text_output($message);
+			}
+			else
+			{
+				$message = sprintf(
+					lang('flash_failure_plural'),
+					ucfirst(lang('labels_site') .' '. lang('labels_settings')),
+					lang('actions_updated'),
+					''
+				);
+
+				$flash['status'] = 'error';
+				$flash['message'] = text_output($message);
+			}
+
+			/* write everything to the template */
+			$this->template->write_view('flash_message', '_base/admin/pages/flash', $flash);
+		}
+
+Add after:
+		/* rss submit button */
+		if (isset($_POST['submit-rss']))
+		{
+			$key_exceptions = array('submit', 'old_sim_type');
+
+			foreach ($_POST as $key => $value)
+			{
+				if (!in_array($key, $key_exceptions))
+				{
+					$update_array['rss_value'] = $this->input->xss_clean($value);
+
+					/* run the update query */
+					$update = $this->rss->update_setting($key, $update_array);
+				}
+			}
+
+			if ($update > 0)
+			{
+				$new_type = $this->input->post('sim_type', TRUE);
+				$old_type = $this->input->post('old_sim_type', TRUE);
+
+				if ($new_type != $old_type)
+				{
+					$data_old = array('menu_display' => 'n');
+					$data_new = array('menu_display' => 'y');
+
+					$this->menu_model->update_menu_item($data_old, $old_type, 'menu_sim_type');
+					$this->menu_model->update_menu_item($data_new, $new_type, 'menu_sim_type');
+				}
+
+				$message = sprintf(
+					lang('flash_success_plural'),
+					ucfirst(lang('labels_site') .' '. lang('labels_settings')),
+					lang('actions_updated'),
+					''
+				);
+
+				$flash['status'] = 'success';
+				$flash['message'] = text_output($message);
+			}
+			else
+			{
+				$message = sprintf(
+					lang('flash_failure_plural'),
+					ucfirst(lang('labels_site') .' '. lang('labels_settings')),
+					lang('actions_updated'),
+					''
+				);
+
+				$flash['status'] = 'error';
+				$flash['message'] = text_output($message);
+			}
+
+			/* write everything to the template */
+			$this->template->write_view('flash_message', '_base/admin/pages/flash', $flash);
+		}
+
+Look for:
+		/*
+		|---------------------------------------------------------------
+		| MIBBIT CHAT ITEMS
+		|---------------------------------------------------------------
+		*/
+
+		/* grab all settings */
+		$chat = $this->chat->get_all_settings();
+
+		if ($chat->num_rows() > 0)
+		{
+			foreach ($chat->result() as $value)
+			{
+				$setting[$value->mibbit_key] = $value->mibbit_value;
+			}
+
+			/* submit button */
+			$data['button_submit_mibbit'] = array(
+				'type' => 'submit',
+				'class' => 'button-main',
+				'name' => 'submit-mibbit',
+				'value' => 'submit',
+				'content' => ucwords(lang('actions_submit'))
+			);
+
+			$data['mchat'] = array(
+				'server_name' => array(
+					'name' => 'server_name',
+					'id' => 'server_name',
+					'value' => $setting['server_name']),
+				'server_address' => array(
+					'name' => 'server_address',
+					'id' => 'server_address',
+					'value' => $setting['server_address']),
+				'server_channel' => array(
+					'name' => 'channel',
+					'id' => 'channel',
+					'value' => $setting['channel']),
+				'server_guest' => array(
+					'name' => 'guest_prefix',
+					'id' => 'guest_prefix',
+					'value' => $setting['guest_prefix']),
+				'server_widget' => array(
+					'name' => 'widgetid',
+					'id' => 'widgetid',
+					'value' => $setting['widgetid']),
+				'server_stats_url' => array(
+					'name' => 'stats_page_url',
+					'id' => 'stats_page_url',
+					'value' => $setting['stats_page_url']),
+				'server_height' => array(
+					'name' => 'height',
+					'id' => 'height',
+					'value' => $setting['height']),
+				'server_width' => array(
+					'name' => 'width',
+					'id' => 'width',
+					'value' => $setting['width']),
+			);
+		}
+
+Add after:
+		/*
+		|---------------------------------------------------------------
+		| RSS ITEMS
+		|---------------------------------------------------------------
+		*/
+
+		/* grab all settings */
+		$rss = $this->rss->get_all_settings();
+
+		if ($rss->num_rows() > 0)
+		{
+			foreach ($rss->result() as $value)
+			{
+				$setting[$value->rss_key] = $value->rss_value;
+			}
+
+			/* submit button */
+			$data['button_submit_rss'] = array(
+				'type' => 'submit',
+				'class' => 'button-main',
+				'name' => 'submit-rss',
+				'value' => 'submit',
+				'content' => ucwords(lang('actions_submit'))
+			);
+
+			$data['rss'] = array(
+				'rss_url' => array(
+					'name' => 'rss_url',
+					'id' => 'rss_url',
+					'value' => $setting['rss_url']),
+				'rss_limit' => array(
+					'name' => 'rss_limit',
+					'id' => 'rss_limit',
+					'value' => $setting['rss_limit']),
+			);
+		}
+
+Look for:
+			'header_chat' => ucwords(lang('labels_mibbit') . ' ' . lang('labels_settings')),
+Add after:
+			'header_rss' => ucwords(lang('rss') . ' ' . lang('labels_settings')),
+
+application/views/_base_override/admin/pages/site_settings.php
+Look for:
+		<li><a href="#five"><span><?php echo $label['mibbit'];?></span></a></li>
+
+Add after:
+		<li><a href="#six"><span><?php echo $label['rss'];?></span></a></li>
+
+Look for:
+	<div id="five">
+		<?php echo form_open('site/settings/3');?>
+			<?php echo text_output($label['header_chat'], 'h2', 'page-subhead');?>
+
+			<div class="indent-left">
+				<p>
+					<kbd><?php echo $label['mserver_name'];?></kbd>
+					<?php echo form_input($mchat['server_name']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_address'];?></kbd>
+					<?php echo form_input($mchat['server_address']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_channel'];?></kbd>
+					<?php echo form_input($mchat['server_channel']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_guest'];?></kbd>
+					<?php echo form_input($mchat['server_guest']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_widget'];?></kbd>
+					<?php echo form_input($mchat['server_widget']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_stats_url'];?></kbd>
+					<?php echo form_input($mchat['server_stats_url']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_height'];?></kbd>
+					<?php echo form_input($mchat['server_height']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['mserver_width'];?></kbd>
+					<?php echo form_input($mchat['server_width']);?>
+				</p>
+			</div>
+
+			<br />
+			<p><?php echo form_button($button_submit_mibbit);?></p>
+		<?php echo form_close();?>
+	</div>
+
+Add after:
+	<div id="six">
+		<?php echo form_open('site/settings/5');?>
+			<?php echo text_output($label['header_rss'], 'h2', 'page-subhead');?>
+
+			<div class="indent-left">
+				<p>
+					<kbd><?php echo $label['rss_url'];?></kbd>
+					<?php echo form_input($rss['rss_url']);?>
+				</p>
+				<p>
+					<kbd><?php echo $label['rss_limit'];?></kbd>
+					<?php echo form_input($rss['rss_limit']);?>
+				</p>
+			</div>
+
+			<br />
+			<p><?php echo form_button($button_submit_rss);?></p>
+		<?php echo form_close();?>
+	</div>
+
+-------------------------------------
+Changelog - Dates are in Epoch time
+
+1271763038: Started work on RSS External Feed MOD for Nova. Currently a bug in applications/controllers/site.php causing a blank
+			screen.
