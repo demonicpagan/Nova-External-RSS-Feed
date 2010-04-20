@@ -225,6 +225,10 @@
 					<kbd><?php echo $label['rss_limit'];?></kbd>
 					<?php echo form_input($rss['rss_limit']);?>
 				</p>
+				<p>
+					<kbd><?php echo $label['rss_site_url'];?></kbd>
+					<?php echo form_input($rss['rss_site_url']);?>
+				</p>
 			</div>
 
 			<br />

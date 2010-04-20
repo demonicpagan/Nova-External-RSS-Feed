@@ -30,7 +30,7 @@ class Site extends Site_base {
 		$this->load->model('ranks_model', 'ranks');
 
 		/* load rss settings model */
-		$this->load->model('rss_model', 'rss');
+		$this->load->model('external_rss_model', 'rss');
 
 		if (isset($_POST['submit']))
 		{
@@ -485,6 +485,10 @@ class Site extends Site_base {
 					'name' => 'rss_limit',
 					'id' => 'rss_limit',
 					'value' => $setting['rss_limit']),
+				'rss_site_url' => array(
+					'name' => 'rss_site_url',
+					'id' => 'rss_site_url',
+					'value' => $setting['rss_site_url']),
 			);
 		}
 
@@ -531,7 +535,9 @@ class Site extends Site_base {
 			'online' => lang('misc_label_online'),
 			'posts_num' => ucwords(lang('global_missionposts')) .' '. lang('labels_per') .' '. ucfirst(lang('labels_page')),
 			'rank' => ucwords(lang('global_rank') .' '. lang('labels_set')),
+			'rss' => ucfirst(lang('rss')),
 			'rss_limit' => lang('rss_limit'),
+			'rss_site_url' => lang('rss_site_url'),
 			'rss_url' => lang('rss_url'),
 			'requirement' => ucwords(lang('labels_posting') .' '. lang('labels_requirements')),
 			'sample_post' => ucwords(lang('actions_use') .' '. lang('labels_sample_post')) .' '. lang('labels_on') .' '.

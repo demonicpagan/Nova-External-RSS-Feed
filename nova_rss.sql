@@ -38,4 +38,5 @@ CREATE TABLE IF NOT EXISTS `nova_rss` (
 
 INSERT INTO `nova_rss` (`rss_id`, `rss_key`, `rss_value`) VALUES
 (1, 'rss_url', 'http://<yoursite>/feed'),
-(2, 'rss_limit', '15');
+(2, 'rss_limit', '15'),
+(3, 'rss_site_url', 'http://<yoursite>');

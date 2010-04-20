@@ -1,32 +1,32 @@
 <?php
 /*
 |---------------------------------------------------------------
-| MAIN CONTROLLER
+| SIM CONTROLLER
 |---------------------------------------------------------------
 |
-| File: controllers/main.php
+| File: controllers/sim.php
 | System Version: 1.0
 |
-| Controller that handles the MAIN section of the system.
+| Controller that handles the SIM part of the system.
 |
 */
 
-require_once APPPATH . 'controllers/base/main_base.php';
+require_once APPPATH . 'controllers/base/sim_base.php';
 
-class Main extends Main_base {
-
-	function Main()
+class Sim extends Sim_base {
+	
+	function Sim()
 	{
-		parent::Main_base();
+		parent::Sim_base();
 	}
 
-	function rss()
+	function logarchive()
 	{
 		// Load the SimplePie Library
 		$this->load->library('simplepie');
 
 		// Adds RSS Feed to main
-		$this->load->model('rss_model', 'rss');
+		$this->load->model('external_rss_model', 'rss');
 		$rss = $this->rss->get_all_settings();
 
 		// Make sure there is something there
@@ -43,11 +43,11 @@ class Main extends Main_base {
 			// Set the number of items returned
 			$this->simplepie->set_item_limit($setting['rss_limit']);
 
-			// Set cache location
-			$this->simplepie->set_cache_location(APPPATH.'cache/rss');
-
 			$data['rss_url'] = $setting['rss_url'];
 		}
+
+		// Disable SimplePie Cache
+		$this->simplepie->enable_cache(false);
 
 		// Initialize SimplePie
 		$this->simplepie->init();
@@ -63,10 +63,11 @@ class Main extends Main_base {
 			'rss_recent' => $this->lang->line('rss_recent'),
 			'rss_sim' => $this->options['sim_name'],
 			'rss_full' => $this->lang->line('rss_full'),
+			'rss_ucip' => $this->lang->line('rss_ucip'),
 		);
 
 		// Get view file page location
-		$view_loc = view_location('main_rss', $this->skin, 'main');
+		$view_loc = view_location('sim_logarchive', $this->skin, 'main');
 
 		// write data to the template
 		$this->template->write('title', $this->lang->line('rss_title'));
@@ -75,8 +76,7 @@ class Main extends Main_base {
 		// render the template
 		$this->template->render();
 	}
-
 }
 
-/* End of file main.php */
-/* Location: ./application/controllers/main.php */
+/* End of file sim.php */
+/* Location: ./application/controllers/sim.php */

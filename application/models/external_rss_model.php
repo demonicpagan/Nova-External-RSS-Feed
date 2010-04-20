@@ -1,10 +1,10 @@
 <?php
 /*
 |---------------------------------------------------------------
-| CHAT MODEL
+| EXTERNAL RSS MODEL
 |---------------------------------------------------------------
 |
-| File: models/chat_model.php
+| File: models/external_rss_model.php
 | System Version: 1.0
 |
 | Model used to access the config table and pull the system global
@@ -12,9 +12,9 @@
 |
 */
 
-class Chat_model extends Model {
+class External_rss_model extends Model {
 
-	function Chat_model()
+	function External_rss_model()
 	{
 		parent::Model();
 
@@ -84,5 +84,5 @@ class Chat_model extends Model {
 	}
 }
 
-/* End of file chat_model.php */
-/* Location: ./application/models/chat_model.php */
+/* End of file external_rss_model.php */
+/* Location: ./application/models/external_rss_model.php */

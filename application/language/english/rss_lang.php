@@ -57,3 +57,4 @@ $lang['rss_full'] = 'Full Archive';
 $lang['rss'] = 'External RSS Feed';
 $lang['rss_url'] = 'External RSS Feed URL';
 $lang['rss_limit'] = 'Number of Returned Items';
+$lang['rss_site_url'] = 'Archive URL';

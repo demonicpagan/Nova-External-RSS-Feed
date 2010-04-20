@@ -22,9 +22,9 @@ application you need to perform the following steps.
 			rss_key varchar 100 (blank - don't put anything in default field)
 			rss_value text (blank - don't put anything in default field)
 
-2. Upload application/controllers/main.php to your application/controllers folder of your Nova install replacing 
+2. Upload application/controllers/sim.php to your application/controllers folder of your Nova install replacing 
 the existing one if you haven't already modified this file. If you already have changes in this file, it's best 
-that you just take the contents of this file and add it into your existing main.php file.
+that you just take the contents of this file and add it into your existing sim.php file.
 
 3*. Upload application/controllers/site.php to your application/controllers folder of your Nova install replacing 
 the existing one if you haven't already modified this file. If you already have changes in this file, it's best 
@@ -43,19 +43,21 @@ application/views/language/english folder of your Nova install. Translate this p
 them to the appropriate language directories. (If you would like your language included into a future release, 
 please contact me via email.)
 
-6. Upload application/models/rss_model.php to your application/models folder of your Nova installation.
+6. Upload application/libraries/Simplepie.php to your application/libraries folder of your Nova installation.
 
-7. Upload application/views/_base_override/main/pages/main_rss.php to your
+7. Upload application/models/external_rss_model.php to your application/models folder of your Nova installation.
+
+8. Upload application/views/_base_override/main/pages/sim_logarchive.php to your
 application/views/_base_override/main/pages folder of your Nova install.
 
-8*. Upload application/views/_base_override/admin/pages/site_settings.php to your
+9*. Upload application/views/_base_override/admin/pages/site_settings.php to your
 application/views/_base_override/admin/pages folder of your Nova install.
 
 *Note: If you are using my Mibbit Chat MOD, you'll want to be careful as to not overwrite the contents of this page. Refer to 
 the end of this README before the ChangeLog for what to do if you do have the Mibbit Chat MOD installed.
 
-9. Log into your Nova management system and add a RSS menu item so your users can access your RSS page.
-You will use the link of main/rss when you create the menu item.
+10. Log into your Nova management system and add a RSS menu item so your users can access your RSS page.
+You will use the link of sim/logarchive when you create the menu item.
 
 If you experience any issues please submit a bug report on 
 http://redmine.stelth2000inc.com/projects/nova-rss-feeds/issues.
@@ -350,7 +352,7 @@ Look for:
 
 Add after:
 	<div id="six">
-		<?php echo form_open('site/settings/5');?>
+		<?php echo form_open('site/settings/4');?>
 			<?php echo text_output($label['header_rss'], 'h2', 'page-subhead');?>
 
 			<div class="indent-left">
@@ -369,8 +371,48 @@ Add after:
 		<?php echo form_close();?>
 	</div>
 
+Look for:
+		<div id="four">
+			<?php echo form_open('site/settings/4');?>
+				<?php echo text_output($label['header_user'], 'h2', 'page-subhead');?>
+
+				<?php foreach ($user as $u): ?>
+					<p>
+						<kbd><?php echo $u['label'];?></kbd>
+						<?php echo form_input($u['key'], $u['value']);?>
+					</p>
+				<?php endforeach; ?>
+
+				<br />
+				<p><?php echo form_button($button_submit);?></p>
+			<?php echo form_close();?>
+		</div>
+
+Change to:
+		<div id="four">
+			<?php echo form_open('site/settings/5');?>
+				<?php echo text_output($label['header_user'], 'h2', 'page-subhead');?>
+
+				<?php foreach ($user as $u): ?>
+					<p>
+						<kbd><?php echo $u['label'];?></kbd>
+						<?php echo form_input($u['key'], $u['value']);?>
+					</p>
+				<?php endforeach; ?>
+
+				<br />
+				<p><?php echo form_button($button_submit);?></p>
+			<?php echo form_close();?>
+		</div>
+
 -------------------------------------
 Changelog - Dates are in Epoch time
 
-1271763038: Started work on RSS External Feed MOD for Nova. Currently a bug in applications/controllers/site.php causing a blank
-			screen.
+1271775224: Fixed the blank screen issue, was an error in the model file where I forgot to rename the class so a
+			class was being called twice (THANK YOU PHP ERROR REPORTING!).
+			Found error in sim.php as to why the feed wasn't being displayed.
+			Added Site URL option to admin to separate it from the Feed URL updated the SQL file to accommodate this.
+			Updated SimplePie library to the latest version from SimplePie.org
+
+1271763038: Started work on RSS External Feed MOD for Nova. Currently a bug in applications/controllers/site.php 
+			causing a blank screen.
