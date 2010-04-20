@@ -60,9 +60,9 @@ the end of this README before the ChangeLog for what to do if you do have the Mi
 You will use the link of sim/logarchive when you create the menu item.
 
 If you experience any issues please submit a bug report on 
-http://redmine.stelth2000inc.com/projects/nova-rss-feeds/issues.
+http://github.com/demonicpagan/Nova-External-RSS-Feed/issues.
 
-You can always get the latest SVN trunk from http://redmine.stelth2000inc.com/projects/show/nova-rss-feeds as well.
+You can always get the latest SVN trunk from http://github.com/demonicpagan/Nova-External-RSS-Feed as well.
 
 -------------------------------------
 CHANGES TO MAKE IF YOU HAVE MIBBIT
