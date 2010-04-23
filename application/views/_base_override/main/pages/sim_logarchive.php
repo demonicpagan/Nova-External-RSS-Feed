@@ -1,9 +1,10 @@
 <?php echo text_output($header, 'h1', 'page_head'); ?>
 
 <?php echo $rss['rss_recent'] . $rss['rss_sim']; ?>, <?php echo $rss['rss_ucip']; ?>
-<ul style="list-style-type: square;">
-		<?php foreach ($rss_items as $item): ?>
-		<li><a target="_blank" href="<?php echo $item->get_link(); ?>"><?php echo $item->get_title(); ?></a></li>
+<br /><br />
+<ul style="list-style-type: square; margin-left: 10px;">
+		<?php foreach ($rss_items['items'] as $item): ?>
+		<li><a target="_blank" href="<?php echo $item['link']; ?>"><?php echo $item['title']; ?></a></li>
 		<?php endforeach; ?>
 </ul>
 <br />

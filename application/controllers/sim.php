@@ -22,39 +22,30 @@ class Sim extends Sim_base {
 
 	function logarchive()
 	{
-		// Load the SimplePie Library
-		$this->load->library('simplepie');
 
 		// Adds RSS Feed to main
-		$this->load->model('external_rss_model', 'rss');
-		$rss = $this->rss->get_all_settings();
+		$this->config->load('external_rss', TRUE);
 
-		// Make sure there is something there
-		if ($rss->num_rows() > 0)
-		{
-			foreach ($rss->result() as $rssr)
-			{
-				$setting[$rssr->rss_key] = $rssr->rss_value;
-			}
+		// Load the SimplePie Library
+		$this->load->library('lastrss');
 
-			// Set the Feed URL
-			$this->simplepie->set_feed_url($setting['rss_feed_url']);
+		// Set config items to variables
+		$rss_url = $this->config->item('rss_url','external_rss');
+		$rss_limit = $this->config->item('rss_limit','external_rss');
+		$rss_cache_location = $this->config->item('rss_cahce_location','external_rss');
+		$rss_cache_time = $this->config->item('rss_cache_time','external_rss');
 
-			// Set the number of items returned
-			$this->simplepie->set_item_limit($setting['rss_limit']);
+		// lastRSS Cache
+		$this->lastrss->cache_time = $rss_cache_time;
+		$this->lastrss->cache_dir = $rss_cache_location;
 
-			$data['rss_url'] = $setting['rss_url'];
-		}
+		// Set the Feed URL
+		$data['rss_items'] = $this->lastrss->get($rss_url);
 
-		// Disable SimplePie Cache
-		$this->simplepie->enable_cache(false);
+		// Set the number of items returned
+		$this->lastrss->items_limit = $rss_limit;
 
-		// Initialize SimplePie
-		$this->simplepie->init();
-		$this->simplepie->handle_content_type();
-
-		// Get the number of items from the feed
-		$data['rss_items'] = $this->simplepie->get_items();
+		$data['rss_site_url'] = $this->config->item('rss_site_url','external_rss');
 
 		$data['header'] = $this->lang->line('rss_title');
 
