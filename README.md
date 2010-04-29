@@ -22,7 +22,7 @@ that you just take the contents of this file and add it into your existing sim.p
 4. Add the following line into your app_lang.php for your associated language(s) after the rest of the includes 
 and before the Global items.
 
-	`/* include RSS External Feed Language file */`
+	`/* include RSS External Feed Language file */`<br />
 	`include_once APPPATH .'language/'. $language . '/rss_lang.php';`
 
 5. Upload application/language/english/rss_lang.php to your 
@@ -45,20 +45,25 @@ You can always get the latest SVN trunk from <http://github.com/demonicpagan/Nov
 
 Changelog - Dates are in Epoch time
 -----------------------------------
-1272514948: Created a more readable README for GitHub.
+1272514948:
 
-1271983178: Changed the RSS Parser library from SimplePie to lastRSS. SimplePie has too many incompatibilities with
+*	Created a more readable README for GitHub.
+
+1271983178:
+
+*	Changed the RSS Parser library from SimplePie to lastRSS. SimplePie has too many incompatibilities with
 PHP5 causing pages to be unreachable thus resulting in blank pages if running on Firefox and connection
 errors in Chrome and Internet Explorer.
+*	Added a cache directory for transparent caching of rss feeds.
 
-Added a cache directory for transparent caching of rss feeds.
+1271775224:
 
-1271775224: Fixed the blank screen issue, was an error in the model file where I forgot to rename the class so a
+*	Fixed the blank screen issue, was an error in the model file where I forgot to rename the class so a
 class was being called twice (THANK YOU PHP ERROR REPORTING!).
-Found error in sim.php as to why the feed wasn't being displayed.
-Added Site URL option to admin to separate it from the Feed URL updated the SQL file to accommodate this.
+*	Found error in sim.php as to why the feed wasn't being displayed.
+*	Added Site URL option to admin to separate it from the Feed URL updated the SQL file to accommodate this.
+*	Updated SimplePie library to the latest version from SimplePie.org
 
-Updated SimplePie library to the latest version from SimplePie.org
-
-1271763038: Started work on RSS External Feed MOD for Nova. Currently a bug in applications/controllers/site.php 
+1271763038:
+*	Started work on RSS External Feed MOD for Nova. Currently a bug in applications/controllers/site.php 
 causing a blank screen.
