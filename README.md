@@ -65,5 +65,6 @@ class was being called twice (THANK YOU PHP ERROR REPORTING!).
 *	Updated SimplePie library to the latest version from SimplePie.org
 
 1271763038:
+
 *	Started work on RSS External Feed MOD for Nova. Currently a bug in applications/controllers/site.php 
 causing a blank screen.
