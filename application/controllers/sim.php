@@ -28,11 +28,11 @@ class Sim extends Nova_sim {
 		$this->lastrss->cache_time = $rss_cache_time;
 		$this->lastrss->cache_dir = $rss_cache_location;
 
-		// Set the Feed URL
-		$data['rss_items'] = $this->lastrss->get($rss_url);
-
 		// Set the number of items returned
 		$this->lastrss->items_limit = $rss_limit;
+
+		// Set the Feed URL
+		$data['rss_items'] = $this->lastrss->get($rss_url);
 
 		$data['rss_site_url'] = $this->config->item('rss_site_url','external_rss');
 

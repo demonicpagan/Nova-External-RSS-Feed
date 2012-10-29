@@ -45,6 +45,10 @@ You can always get the latest SVN trunk from <http://github.com/demonicpagan/Nov
 
 Changelog - Dates are in Epoch time
 -----------------------------------
+1351502418:
+
+*	Fixed an issue where what you set for the limit of items wasn't being taken into account.
+
 1328663634:
 
 *	Updating files to be compatible with Nova 2.0.1
