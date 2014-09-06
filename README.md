@@ -7,7 +7,7 @@ This application is developed under the licenses of Nova and Laravel.
 
 Install Instructions
 --------------------
-
+This will come about when development is started on the module.
 
 If you experience any issues please submit a bug report on 
 <http://github.com/demonicpagan/Nova-External-RSS-Feed/issues>.
